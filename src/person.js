@@ -4,6 +4,6 @@ export class Person {
     }
 
     walk() {
-        console.log("walk", this.name);
+        // console.log("walk", this.name);
     }
 }

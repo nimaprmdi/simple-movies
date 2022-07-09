@@ -17,12 +17,12 @@ class App extends Component {
 
     constructor(props) {
         super(props);
-        console.log("App - Constructed");
+        // console.log("App - Constructed");
         this.state.counters[0].value = 5;
     }
 
     componentDidMount() {
-        console.log("App - Mounted");
+        // console.log("App - Mounted");
     }
 
     handleDelete = (counterId) => {
@@ -51,7 +51,9 @@ class App extends Component {
         return (
             <>
                 <Navbar
-                    totalCounters={this.state.counters.filter((c) => c.value > 0).length}
+                    totalCounters={
+                        this.state.counters.filter((c) => c.value > 0).length
+                    }
                 />
 
                 <main className="container">
