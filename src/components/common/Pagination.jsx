@@ -14,18 +14,8 @@ const Pagination = (props) => {
             <ul className="pagination">
                 {pages.map((page, index) => {
                     return (
-                        <li
-                            key={index}
-                            className={
-                                page === currentPage
-                                    ? "page-item active"
-                                    : "page-item"
-                            }
-                        >
-                            <a
-                                onClick={() => onPageChange(page)}
-                                className="page-link"
-                            >
+                        <li key={index} className={page === currentPage ? "page-item active" : "page-item"}>
+                            <a onClick={() => onPageChange(page)} className="page-link">
                                 {page}
                             </a>
                         </li>
