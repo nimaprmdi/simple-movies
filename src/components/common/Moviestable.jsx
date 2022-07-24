@@ -1,42 +1,37 @@
-import React from "react";
+import React, { Component } from "react";
 import Like from "./Like";
+import Table from "./Table";
+import { Link } from "react-router-dom";
 
-const Moviestable = ({ movies, onHandleLike, onHandleDelete, onSort }) => {
-    return (
-        <table className="table">
-            <thead>
-                <tr>
-                    <th onClick={() => onSort("title")}>Title</th>
-                    <th onClick={() => onSort("gernre.name")}>Genre</th>
-                    <th onClick={() => onSort("numberInStock")}>Stock</th>
-                    <th onClick={() => onSort("dailyRentalRate")}>Rate</th>
-                    <th />
-                    <th />
-                </tr>
-            </thead>
+class MoviesTable extends Component {
+    columns = [
+        {
+            path: "title",
+            label: "Title",
+            content: (movie) => <Link to={`/movies/${movie._id}`}>{movie.title} </Link>,
+        },
+        { path: "genre.name", label: "Genre" },
+        { path: "numberInStock", label: "Stock" },
+        { path: "dailyRentalRate", label: "Rate" },
+        {
+            key: "like",
+            content: (movie) => <Like liked={movie.liked} onHandleLike={() => this.props.onHandleLike(movie)} />,
+        },
+        {
+            key: "delete",
+            content: (movie) => (
+                <button onClick={() => this.props.onHandleDelete(movie)} className="btn btn-danger btn-sm">
+                    Delete
+                </button>
+            ),
+        },
+    ];
 
-            <tbody>
-                {movies.map((movie) => {
-                    return (
-                        <tr key={movie._id}>
-                            <td>{movie.title}</td>
-                            <td>{movie.genre.name}</td>
-                            <td>{movie.numberInStock}</td>
-                            <td>{movie.dailyRentalRate}</td>
-                            <td>
-                                <Like liked={movie.liked} onHandleLike={() => onHandleLike(movie)} />
-                            </td>
-                            <td>
-                                <button onClick={() => onHandleDelete(movie)} className="btn btn-danger btn-sm">
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
-                    );
-                })}
-            </tbody>
-        </table>
-    );
-};
+    render() {
+        const { movies, onSort, sortColumn } = this.props;
 
-export default Moviestable;
+        return <Table sortColumn={sortColumn} onSort={onSort} data={movies} columns={this.columns} />;
+    }
+}
+
+export default MoviesTable;

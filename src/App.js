@@ -1,10 +1,15 @@
 import React, { Component } from "react";
 import "./App.css";
 import Teacher, { handleDegree } from "./teacher";
-import Movies from "./components/Movies";
 import Counter from "./components/Counter";
 import Counters from "./components/Counters";
-import Navbar from "./components/Navbar";
+import Movies from "./components/Movies";
+import Navbar from "./components/common/Navbar";
+import Rentals from "./components/common/Rentals";
+import MoviesSingle from "./components/common/MoviesSingle";
+import LoginForm from "./components/LoginForm";
+import NewMovie from "./components/NewMovie";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 
 class App extends Component {
     state = {
@@ -50,21 +55,20 @@ class App extends Component {
     render() {
         return (
             <>
-                <Navbar
-                    totalCounters={
-                        this.state.counters.filter((c) => c.value > 0).length
-                    }
-                />
-
                 <main className="container">
-                    {/* <Counters
-                        counters={this.state.counters}
-                        onReset={this.handleReset}
-                        onIncrement={this.handleIncrement}
-                        onDelete={this.handleDelete}
-                    /> */}
+                    <BrowserRouter>
+                        <Navbar />
+                        <Routes>
+                            <Route path="/login" element={<LoginForm />} />
+                            <Route path="/movies" element={<Movies />} />
+                            <Route path="/movies/:id/" element={<MoviesSingle />} />
+                            <Route path="/movies/new" element={<NewMovie />} />
 
-                    <Movies />
+                            <Route path="/rentals" element={<Rentals />} />
+
+                            <Route path="/" element={<Navigate replace to="/movies" />} />
+                        </Routes>
+                    </BrowserRouter>
                 </main>
             </>
         );

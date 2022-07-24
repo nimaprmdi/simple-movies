@@ -6,6 +6,7 @@ import { getGenres } from "../services/fakeGenreService";
 import { getMovies } from "../services/fakeMovieService";
 import Moviestable from "./common/Moviestable";
 import _ from "lodash";
+import { Link } from "react-router-dom";
 
 class Movies extends Component {
     state = {
@@ -42,28 +43,29 @@ class Movies extends Component {
         this.setState({ selectedGenre: genre, currentPage: 1 });
     };
 
-    handleSort = (path) => {
-        const sortColumn = { ...this.state.sortColumn };
-
-        if (sortColumn.path === path) {
-            sortColumn.order = sortColumn.order === "asc" ? "desc" : "asc";
-        } else {
-            sortColumn.path = path;
-            sortColumn.order = "asc";
-        }
-
+    handleSort = (sortColumn) => {
         this.setState({ sortColumn });
     };
 
-    render() {
-        const { length: count } = this.state.movies;
+    getPagedData = () => {
         const { pageSize, currentPage, movies: allMovies, selectedGenre, sortColumn } = this.state;
-        if (count === 0) return <p>No Movies</p>;
 
         const filtered =
             selectedGenre && selectedGenre._id ? allMovies.filter((m) => m.genre._id === selectedGenre._id) : allMovies;
         const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
         const movies = paginate(sorted, currentPage, pageSize);
+
+        return { totalCount: filtered.length, data: movies };
+    };
+
+    addMovie = () => {};
+
+    render() {
+        const { length: count } = this.state.movies;
+        const { pageSize, currentPage, sortColumn } = this.state;
+        if (count === 0) return <p>No Movies</p>;
+
+        const { totalCount, data: movies } = this.getPagedData();
 
         return (
             <div className="row">
@@ -75,17 +77,22 @@ class Movies extends Component {
                     />
                 </div>
                 <div className="col">
-                    <p>Showing {filtered.length} From DB</p>
+                    <Link className="btn btn-primary mb-3" to="/movies/new">
+                        New Movie
+                    </Link>
+
+                    <p>Showing {totalCount} From DB</p>
 
                     <Moviestable
                         movies={movies}
+                        sortColumn={sortColumn}
                         onHandleLike={(e) => this.handleLike(e)}
                         onHandleDelete={(e) => this.handleDelete(e)}
                         onSort={this.handleSort}
                     />
 
                     <Pagination
-                        itemsCount={filtered.length}
+                        itemsCount={totalCount}
                         pageSize={pageSize}
                         currentPage={currentPage}
                         onPageChange={this.handlePageChange}
