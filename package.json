@@ -1,5 +1,5 @@
 {
-    "homepage": "https://nimaprmdi.github.io/react-app",
+    "homepage": "https://nimaprmdi.github.io/simple-movies",
     "name": "simple-movies",
     "version": "0.1.0",
     "private": true,
@@ -9,6 +9,7 @@
         "@testing-library/user-event": "^13.5.0",
         "bootstrap": "^4.1.1",
         "font-awesome": "^4.7.0",
+        "gh-pages": "^4.0.0",
         "joi": "^17.6.0",
         "lodash": "^4.17.10",
         "prop-types": "^15.6.2",
@@ -22,7 +23,8 @@
         "start": "react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test",
-        "eject": "react-scripts eject"
+        "eject": "react-scripts eject",
+        "deploy": "gh-pages -d build"
     },
     "eslintConfig": {
         "extends": [
