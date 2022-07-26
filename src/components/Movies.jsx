@@ -3,7 +3,7 @@ import ListGroup from "./common/ListGroup";
 import Pagination from "./common/Pagination";
 import { paginate } from "./utils/paginate";
 import { getGenres } from "../services/fakeGenreService";
-import { getMovies } from "../services/fakeMovieService";
+import { getMovies, deleteMovie } from "../services/fakeMovieService";
 import Moviestable from "./common/Moviestable";
 import _ from "lodash";
 import { Link } from "react-router-dom";
@@ -25,6 +25,10 @@ class Movies extends Component {
     handleDelete = (movie) => {
         const movies = this.state.movies.filter((m) => m._id !== movie._id);
         this.setState({ movies });
+
+        deleteMovie(movie._id);
+
+        console.log("All movies", getMovies());
     };
 
     handleLike = (movie) => {
@@ -50,8 +54,7 @@ class Movies extends Component {
     getPagedData = () => {
         const { pageSize, currentPage, movies: allMovies, selectedGenre, sortColumn } = this.state;
 
-        const filtered =
-            selectedGenre && selectedGenre._id ? allMovies.filter((m) => m.genre._id === selectedGenre._id) : allMovies;
+        const filtered = selectedGenre && selectedGenre._id ? allMovies.filter((m) => m.genre._id === selectedGenre._id) : allMovies;
         const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
         const movies = paginate(sorted, currentPage, pageSize);
 
@@ -69,13 +72,8 @@ class Movies extends Component {
 
         return (
             <div className="row">
-                {console.log(this.state.movies)}
                 <div className="col-3">
-                    <ListGroup
-                        items={this.state.genres}
-                        selectedItem={this.state.selectedGenre}
-                        onItemSelect={this.handleGenreSelect}
-                    />
+                    <ListGroup items={this.state.genres} selectedItem={this.state.selectedGenre} onItemSelect={this.handleGenreSelect} />
                 </div>
                 <div className="col">
                     <Link className="btn btn-primary mb-3" to="/movies/new">
@@ -84,20 +82,9 @@ class Movies extends Component {
 
                     <p>Showing {totalCount} From DB</p>
 
-                    <Moviestable
-                        movies={movies}
-                        sortColumn={sortColumn}
-                        onHandleLike={(e) => this.handleLike(e)}
-                        onHandleDelete={(e) => this.handleDelete(e)}
-                        onSort={this.handleSort}
-                    />
+                    <Moviestable movies={movies} sortColumn={sortColumn} onHandleLike={(e) => this.handleLike(e)} onHandleDelete={(e) => this.handleDelete(e)} onSort={this.handleSort} />
 
-                    <Pagination
-                        itemsCount={totalCount}
-                        pageSize={pageSize}
-                        currentPage={currentPage}
-                        onPageChange={this.handlePageChange}
-                    />
+                    <Pagination itemsCount={totalCount} pageSize={pageSize} currentPage={currentPage} onPageChange={this.handlePageChange} />
                 </div>
             </div>
         );

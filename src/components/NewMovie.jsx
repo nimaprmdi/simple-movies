@@ -13,7 +13,7 @@ const NewMovie = () => {
         title: "",
         numberInStock: "",
         rate: "",
-        genres: "",
+        genre: "",
         movies: [],
     });
 
@@ -21,7 +21,7 @@ const NewMovie = () => {
 
     const schema = Joi.object({
         title: Joi.string().required().label("Title"),
-        genres: Joi.string().required().label("Genres"),
+        genre: Joi.object().label("Genres"),
         numberInStock: Joi.number().required().min(0).max(100).label("Number In Stock"),
         rate: Joi.number().required().min(0).max(5).label("Rate"),
         movies: Joi.array(),
@@ -34,15 +34,13 @@ const NewMovie = () => {
             title: data.title,
             numberInStock: data.numberInStock,
             dailyRentalRate: data.rate,
-            genre: data.genres,
+            genre: data.genre,
             liked: false,
         };
 
         saveMovie(newMovie);
 
         navigate(-1);
-
-        console.log("data", data);
     };
 
     useEffect(() => {
@@ -55,7 +53,7 @@ const NewMovie = () => {
             <form className="px-3" onSubmit={(e) => handleSubmit(e, data, setAllErrors, () => doSubmit(e), schema)}>
                 {renderInput("title", "Title", data, setData, allErrors, setAllErrors, schema)}
 
-                {renderSelect("genres", "Genre", data, setData, allErrors, setAllErrors, genres, schema)}
+                {renderSelect("genre", "Genre", data, setData, allErrors, setAllErrors, genres, schema)}
 
                 {renderInput("numberInStock", "Number In Stock", data, setData, allErrors, setAllErrors, schema)}
 

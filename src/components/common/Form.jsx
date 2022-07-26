@@ -77,7 +77,7 @@ const renderInput = (name, label, data, setData, allErrors, setAllErrors, schema
 
 const renderButton = (data, schema, label) => {
     const { error } = schema.validate(data);
-    console.log(error);
+
     return (
         <button disabled={error} className="btn btn-primary bt-lg">
             {label}
@@ -86,7 +86,6 @@ const renderButton = (data, schema, label) => {
 };
 
 const renderSelect = (name, label, data, setData, allErrors, setAllErrors, genres, schema, defaultValue = null) => {
-    console.log("defaultValue", defaultValue);
     return (
         <>
             <div className="input-group mb-3  mt-4">
