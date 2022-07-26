@@ -69,6 +69,7 @@ class Movies extends Component {
 
         return (
             <div className="row">
+                {console.log(this.state.movies)}
                 <div className="col-3">
                     <ListGroup
                         items={this.state.genres}

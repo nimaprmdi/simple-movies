@@ -7,3 +7,11 @@ export const genres = [
 export function getGenres() {
     return genres.filter((g) => g);
 }
+
+export function getGenreById(id) {
+    return genres.filter((g) => {
+        if (g._id === id) {
+            return [g];
+        }
+    });
+}

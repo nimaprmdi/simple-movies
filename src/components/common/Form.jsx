@@ -2,6 +2,8 @@ import React from "react";
 import Joi from "joi";
 import Input from "./Input";
 
+/* Helper Functions */
+
 const validate = (data, schema) => {
     const options = { abortEarly: true };
 
@@ -19,6 +21,7 @@ const validate = (data, schema) => {
 const validateProperty = ({ name, value }, schema) => {
     const obj = { [name]: value };
     const schemaOfProperty = Joi.object({ [name]: schema.extract(name) });
+
     const { error } = schemaOfProperty.validate(obj);
     return error ? error.details[0].message : null;
 };
@@ -45,23 +48,73 @@ const handleSubmit = (e, data, setAllErrors, doSubmit, schema) => {
     doSubmit();
 };
 
+const handleSelectChange = (e, name, data, setData, allErrors, setAllErrors, schema) => {
+    e.preventDefault();
+
+    const errors = { ...allErrors };
+
+    let input = {
+        name: e.currentTarget.name,
+        value: JSON.parse(e.currentTarget.value),
+    };
+
+    const errorsMessage = validateProperty(input, schema);
+    if (errorsMessage) errors[e.currentTarget.name] = errorsMessage;
+    else delete errors[e.currentTarget.name];
+
+    const dataClone = { ...data };
+
+    dataClone[name] = input.value;
+
+    setData(dataClone);
+    setAllErrors(errors);
+};
+
+/* Input Handlers */
 const renderInput = (name, label, data, setData, allErrors, setAllErrors, schema, type = "text") => {
-    return (
-        <Input
-            name={name}
-            value={data[name]}
-            error={allErrors[name]}
-            onChange={(e) => handleChange(e, data, setData, allErrors, setAllErrors, schema)}
-            label={label}
-            type={type}
-        />
-    );
+    return <Input name={name} value={data[name]} error={allErrors[name]} onChange={(e) => handleChange(e, data, setData, allErrors, setAllErrors, schema)} label={label} type={type} />;
 };
 
 const renderButton = (data, schema, label) => {
     const { error } = schema.validate(data);
-
-    return <button className="btn btn-primary bt-lg">{label}</button>;
+    console.log(error);
+    return (
+        <button disabled={error} className="btn btn-primary bt-lg">
+            {label}
+        </button>
+    );
 };
 
-export { validate, validateProperty, handleChange, handleSubmit, renderInput, renderButton };
+const renderSelect = (name, label, data, setData, allErrors, setAllErrors, genres, schema, defaultValue = null) => {
+    console.log("defaultValue", defaultValue);
+    return (
+        <>
+            <div className="input-group mb-3  mt-4">
+                <div className="input-group-prepend">
+                    <label className="input-group-text" htmlFor={name}>
+                        {label}
+                    </label>
+                </div>
+
+                <select
+                    name={name}
+                    className="custom-select"
+                    onChange={(e) => handleSelectChange(e, name, data, setData, allErrors, setAllErrors, schema)}
+                    id={name}
+                    defaultValue={defaultValue}
+                >
+                    {genres.map((genre) => (
+                        <option key={genre._id} value={JSON.stringify(genre)}>
+                            {genre.name}
+                        </option>
+                    ))}
+                </select>
+            </div>
+            {allErrors[name] && <div className="alert alert-danger d-block">{allErrors[name]}</div>}
+        </>
+    );
+};
+
+/* Exports */
+
+export { validate, validateProperty, handleChange, handleSubmit, renderInput, renderButton, renderSelect };

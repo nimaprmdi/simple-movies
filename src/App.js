@@ -9,6 +9,7 @@ import Rentals from "./components/common/Rentals";
 import MoviesSingle from "./components/common/MoviesSingle";
 import LoginForm from "./components/LoginForm";
 import NewMovie from "./components/NewMovie";
+import NotFound from "./components/NotFound";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 
 class App extends Component {
@@ -67,6 +68,9 @@ class App extends Component {
                             <Route path="/rentals" element={<Rentals />} />
 
                             <Route path="/" element={<Navigate replace to="/movies" />} />
+
+                            <Route path="/404" element={<NotFound />} />
+                            <Route path="*" element={<Navigate replace to="/404" />} />
                         </Routes>
                     </BrowserRouter>
                 </main>
