@@ -9,6 +9,8 @@ const Pagination = (props) => {
     if (pagesCount === 1) return null;
     const pages = _.range(1, pagesCount + 1); // Increase (1) because Array start from 0 => (start , end)
 
+    console.log(itemsCount);
+
     return (
         <nav>
             <ul className="pagination">

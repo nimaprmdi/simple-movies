@@ -53,9 +53,11 @@ const handleSelectChange = (e, name, data, setData, allErrors, setAllErrors, sch
 
     const errors = { ...allErrors };
 
+    console.log("json parse", JSON.parse(e.currentTarget.value));
+
     let input = {
         name: e.currentTarget.name,
-        value: JSON.parse(e.currentTarget.value),
+        value: e.currentTarget.value === null ? null : JSON.parse(e.currentTarget.value),
     };
 
     const errorsMessage = validateProperty(input, schema);
@@ -67,12 +69,23 @@ const handleSelectChange = (e, name, data, setData, allErrors, setAllErrors, sch
     dataClone[name] = input.value;
 
     setData(dataClone);
+
+    console.log(errors);
     setAllErrors(errors);
 };
 
 /* Input Handlers */
 const renderInput = (name, label, data, setData, allErrors, setAllErrors, schema, type = "text") => {
-    return <Input name={name} value={data[name]} error={allErrors[name]} onChange={(e) => handleChange(e, data, setData, allErrors, setAllErrors, schema)} label={label} type={type} />;
+    return (
+        <Input
+            name={name}
+            value={data[name]}
+            error={allErrors[name]}
+            onChange={(e) => handleChange(e, data, setData, allErrors, setAllErrors, schema)}
+            label={label}
+            type={type}
+        />
+    );
 };
 
 const renderButton = (data, schema, label) => {
@@ -102,6 +115,7 @@ const renderSelect = (name, label, data, setData, allErrors, setAllErrors, genre
                     id={name}
                     defaultValue={defaultValue}
                 >
+                    <option value={JSON.stringify({})}>Select Genre</option>
                     {genres.map((genre) => (
                         <option key={genre._id} value={JSON.stringify(genre)}>
                             {genre.name}

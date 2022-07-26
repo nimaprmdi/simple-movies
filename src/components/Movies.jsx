@@ -7,6 +7,7 @@ import { getMovies, deleteMovie } from "../services/fakeMovieService";
 import Moviestable from "./common/Moviestable";
 import _ from "lodash";
 import { Link } from "react-router-dom";
+import Search from "./common/Search";
 
 class Movies extends Component {
     state = {
@@ -15,6 +16,7 @@ class Movies extends Component {
         currentPage: 1,
         pageSize: 3,
         sortColumn: { path: "title", order: "asc" },
+        search: "",
     };
 
     componentDidMount() {
@@ -54,14 +56,26 @@ class Movies extends Component {
     getPagedData = () => {
         const { pageSize, currentPage, movies: allMovies, selectedGenre, sortColumn } = this.state;
 
-        const filtered = selectedGenre && selectedGenre._id ? allMovies.filter((m) => m.genre._id === selectedGenre._id) : allMovies;
-        const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
+        const searched = allMovies.filter((m) => m.title.toLowerCase().includes(this.state.search));
+
+        const filtered =
+            selectedGenre && selectedGenre._id ? allMovies.filter((m) => m.genre._id === selectedGenre._id) : allMovies;
+
+        let sorted = _.orderBy(searched ? searched : filtered, [sortColumn.path], [sortColumn.order]);
+
         const movies = paginate(sorted, currentPage, pageSize);
 
-        return { totalCount: filtered.length, data: movies };
+        return { totalCount: sorted.length, data: movies };
     };
 
     addMovie = () => {};
+
+    onSearch = ({ currentTarget: input }) => {
+        const dataClone = { ...this.state };
+        dataClone[input.name] = input.value;
+        dataClone.currentPage = 1;
+        this.setState({ ...dataClone });
+    };
 
     render() {
         const { length: count } = this.state.movies;
@@ -73,7 +87,11 @@ class Movies extends Component {
         return (
             <div className="row">
                 <div className="col-3">
-                    <ListGroup items={this.state.genres} selectedItem={this.state.selectedGenre} onItemSelect={this.handleGenreSelect} />
+                    <ListGroup
+                        items={this.state.genres}
+                        selectedItem={this.state.selectedGenre}
+                        onItemSelect={this.handleGenreSelect}
+                    />
                 </div>
                 <div className="col">
                     <Link className="btn btn-primary mb-3" to="/movies/new">
@@ -82,9 +100,22 @@ class Movies extends Component {
 
                     <p>Showing {totalCount} From DB</p>
 
-                    <Moviestable movies={movies} sortColumn={sortColumn} onHandleLike={(e) => this.handleLike(e)} onHandleDelete={(e) => this.handleDelete(e)} onSort={this.handleSort} />
+                    <Search search={this.state.search} onHandleSearch={(e) => this.onSearch(e)} />
 
-                    <Pagination itemsCount={totalCount} pageSize={pageSize} currentPage={currentPage} onPageChange={this.handlePageChange} />
+                    <Moviestable
+                        movies={movies}
+                        sortColumn={sortColumn}
+                        onHandleLike={(e) => this.handleLike(e)}
+                        onHandleDelete={(e) => this.handleDelete(e)}
+                        onSort={this.handleSort}
+                    />
+
+                    <Pagination
+                        itemsCount={totalCount}
+                        pageSize={pageSize}
+                        currentPage={currentPage}
+                        onPageChange={this.handlePageChange}
+                    />
                 </div>
             </div>
         );

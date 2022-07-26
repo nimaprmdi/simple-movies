@@ -30,7 +30,7 @@ const MoviesSingle = () => {
     const schema = Joi.object({
         _id: Joi.string(),
         title: Joi.string().required().label("Title"),
-        genre: Joi.object().label("Genres"),
+        genre: Joi.object().required().min(1).label("Genres"),
         numberInStock: Joi.number().required().min(0).max(100).label("Number In Stock"),
         rate: Joi.number().required().min(0).max(5).label("Rate"),
     });
