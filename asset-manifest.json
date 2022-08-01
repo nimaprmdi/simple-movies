@@ -1,20 +1,20 @@
 {
   "files": {
-    "main.css": "/simple-movies/static/css/main.f5d697a0.css",
-    "main.js": "/simple-movies/static/js/main.e48ac87a.js",
-    "static/js/787.9a5f3165.chunk.js": "/simple-movies/static/js/787.9a5f3165.chunk.js",
-    "static/media/fontawesome-webfont.svg?v=4.7.0": "/simple-movies/static/media/fontawesome-webfont.c1e38fd9e0e74ba58f7a.svg",
-    "static/media/fontawesome-webfont.eot": "/simple-movies/static/media/fontawesome-webfont.8b43027f47b20503057d.eot",
-    "static/media/fontawesome-webfont.ttf?v=4.7.0": "/simple-movies/static/media/fontawesome-webfont.1e59d2330b4c6deb84b3.ttf",
-    "static/media/fontawesome-webfont.woff?v=4.7.0": "/simple-movies/static/media/fontawesome-webfont.f691f37e57f04c152e23.woff",
-    "static/media/fontawesome-webfont.woff2?v=4.7.0": "/simple-movies/static/media/fontawesome-webfont.20fd1704ea223900efa9.woff2",
-    "index.html": "/simple-movies/index.html",
-    "main.f5d697a0.css.map": "/simple-movies/static/css/main.f5d697a0.css.map",
-    "main.e48ac87a.js.map": "/simple-movies/static/js/main.e48ac87a.js.map",
-    "787.9a5f3165.chunk.js.map": "/simple-movies/static/js/787.9a5f3165.chunk.js.map"
+    "main.css": "/http-axios/static/css/main.bbdfe3d3.css",
+    "main.js": "/http-axios/static/js/main.bb092942.js",
+    "static/js/787.b701888c.chunk.js": "/http-axios/static/js/787.b701888c.chunk.js",
+    "static/media/fontawesome-webfont.svg?v=4.7.0": "/http-axios/static/media/fontawesome-webfont.c1e38fd9e0e74ba58f7a.svg",
+    "static/media/fontawesome-webfont.eot": "/http-axios/static/media/fontawesome-webfont.8b43027f47b20503057d.eot",
+    "static/media/fontawesome-webfont.ttf?v=4.7.0": "/http-axios/static/media/fontawesome-webfont.1e59d2330b4c6deb84b3.ttf",
+    "static/media/fontawesome-webfont.woff?v=4.7.0": "/http-axios/static/media/fontawesome-webfont.f691f37e57f04c152e23.woff",
+    "static/media/fontawesome-webfont.woff2?v=4.7.0": "/http-axios/static/media/fontawesome-webfont.20fd1704ea223900efa9.woff2",
+    "index.html": "/http-axios/index.html",
+    "main.bbdfe3d3.css.map": "/http-axios/static/css/main.bbdfe3d3.css.map",
+    "main.bb092942.js.map": "/http-axios/static/js/main.bb092942.js.map",
+    "787.b701888c.chunk.js.map": "/http-axios/static/js/787.b701888c.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.f5d697a0.css",
-    "static/js/main.e48ac87a.js"
+    "static/css/main.bbdfe3d3.css",
+    "static/js/main.bb092942.js"
   ]
 }
