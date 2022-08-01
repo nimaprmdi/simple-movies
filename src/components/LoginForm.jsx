@@ -1,80 +1,35 @@
-import React, { useRef, useState } from "react";
-import Input from "./common/Input";
+import React, { Component } from "react";
+import Joi from "joi";
+import Form from "./common/Form";
 
-const LoginForm = () => {
-    const [account, setAccount] = useState({
-        username: "",
-        password: "",
+class LoginForm extends Form {
+    state = {
+        data: { username: "", password: "" },
+        errors: {},
+    };
+
+    schema = Joi.object({
+        username: Joi.string().min(4).required().label("Username"),
+        password: Joi.string().required().label("Password"),
     });
 
-    const [allErrors, setAllErrors] = useState({});
-
-    const validate = () => {
-        const errors = {};
-        if (account.username.trim() === "") errors.username = "Username is empty";
-
-        if (account.password.trim() === "") errors.password = "Password is Empty";
-
-        return Object.keys(errors).length === 0 ? null : errors;
+    doSubmit = () => {
+        // Call the server
+        console.log("Submitted");
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        const errors = validate();
-        setAllErrors(errors || {});
-        if (errors) return;
-    };
-
-    //
-    const validateProperty = ({ name, value }) => {
-        if (name === "username") {
-            if (value.trim() === "") return "Username is empty";
-        }
-
-        if (name === "password") {
-            if (value.trim() === "") return "Password is empty";
-        }
-    };
-
-    const handleChange = ({ currentTarget: input }) => {
-        const errors = { ...allErrors };
-        const errorMessage = validateProperty(input);
-        if (errorMessage) errors[input.name] = errorMessage;
-        else delete errors[input.name];
-
-        const accountClone = { ...account };
-        accountClone[input.name] = input.value;
-        setAccount(accountClone);
-        setAllErrors(errors);
-    };
-
-    return (
-        <div>
-            <h1>Login</h1>
-
-            <form onSubmit={(e) => handleSubmit(e)}>
-                <Input
-                    name="username"
-                    value={account.username}
-                    label="Username"
-                    onChange={(e) => handleChange(e)}
-                    error={allErrors.username}
-                />
-
-                <Input
-                    name="password"
-                    allErrors
-                    value={account.password}
-                    label="Password"
-                    onChange={(e) => handleChange(e)}
-                    error={allErrors.password}
-                />
-
-                <button className="btn btn-primary">Login</button>
-            </form>
-        </div>
-    );
-};
+    render() {
+        return (
+            <div>
+                <h1>Login</h1>
+                <form onSubmit={this.handleSubmit}>
+                    {this.renderInput("username", "Username")}
+                    {this.renderInput("password", "Password", "password")}
+                    {this.renderButton("Login")}
+                </form>
+            </div>
+        );
+    }
+}
 
 export default LoginForm;

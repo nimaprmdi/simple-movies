@@ -13,6 +13,7 @@ import NotFound from "./components/NotFound";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
+import RegisterForm from "./components/RegisterForm";
 
 class App extends Component {
     state = {
@@ -66,6 +67,7 @@ class App extends Component {
                         <Navbar />
                         <Routes>
                             <Route path="/login" element={<LoginForm />} />
+                            <Route path="/register" element={<RegisterForm />} />
                             <Route path="/movies" element={<Movies />} />
                             <Route path="/movies/:id/" element={<MoviesSingle id={this.state.movieId} />} />
                             <Route path="/movies/new" element={<NewMovie />} />

@@ -47,6 +47,15 @@ const Navbar = () => {
                         >
                             Login Form
                         </NavLink>
+
+                        <NavLink
+                            to="/register"
+                            className={({ isActive }) =>
+                                isActive ? "active text-warning mr-2" : "inactive mr-2 text-primary"
+                            }
+                        >
+                            Register Form
+                        </NavLink>
                     </ul>
                 </div>
             </div>
