@@ -24,7 +24,7 @@ const Navbar = () => {
                         <NavLink
                             to="/movies"
                             className={({ isActive }) =>
-                                isActive ? "active text-warning mr-2" : "inactive mr-2 text-white"
+                                isActive ? "active text-warning mr-2" : "inactive mr-2 text-primary"
                             }
                         >
                             Movies
@@ -33,7 +33,7 @@ const Navbar = () => {
                         <NavLink
                             to="/rentals"
                             className={({ isActive }) =>
-                                isActive ? "active text-warning mr-2" : "inactive mr-2 text-white"
+                                isActive ? "active text-warning mr-2" : "inactive mr-2 text-primary"
                             }
                         >
                             Rentals
@@ -42,7 +42,7 @@ const Navbar = () => {
                         <NavLink
                             to="/login"
                             className={({ isActive }) =>
-                                isActive ? "active text-warning mr-2" : "inactive mr-2 text-white"
+                                isActive ? "active text-warning mr-2" : "inactive mr-2 text-primary"
                             }
                         >
                             Login Form

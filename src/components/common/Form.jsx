@@ -1,133 +1,120 @@
-import React from "react";
+import React, { Component } from "react";
 import Joi from "joi";
 import Input from "./Input";
+import Select from "./Select";
 
 /* Helper Functions */
 
-const validate = (data, schema) => {
-    const options = { abortEarly: true };
-
-    const { error } = schema.validate(data, options);
-
-    if (!error) return null;
-    const errors = {};
-    for (let item of error.details) {
-        errors[item.path[0]] = item.message;
-    }
-
-    return errors;
-};
-
-const validateProperty = ({ name, value }, schema) => {
-    const obj = { [name]: value };
-    const schemaOfProperty = Joi.object({ [name]: schema.extract(name) });
-
-    const { error } = schemaOfProperty.validate(obj);
-    return error ? error.details[0].message : null;
-};
-
-const handleChange = ({ currentTarget: input }, data, setData, allErrors, setAllErrors, schema) => {
-    const errors = { ...allErrors };
-    const errorsMessage = validateProperty(input, schema);
-    if (errorsMessage) errors[input.name] = errorsMessage;
-    else delete errors[input.name];
-
-    const dataClone = { ...data };
-    dataClone[input.name] = input.value;
-    setData(dataClone);
-    setAllErrors(errors);
-};
-
-const handleSubmit = (e, data, setAllErrors, doSubmit, schema) => {
-    e.preventDefault();
-
-    const errors = validate(data, schema);
-    setAllErrors(errors || {});
-    if (errors) return;
-
-    doSubmit();
-};
-
-const handleSelectChange = (e, name, data, setData, allErrors, setAllErrors, schema) => {
-    e.preventDefault();
-
-    const errors = { ...allErrors };
-
-    console.log("json parse", JSON.parse(e.currentTarget.value));
-
-    let input = {
-        name: e.currentTarget.name,
-        value: e.currentTarget.value === null ? null : JSON.parse(e.currentTarget.value),
+class Form extends Component {
+    state = {
+        data: {},
+        errors: {},
     };
 
-    const errorsMessage = validateProperty(input, schema);
-    if (errorsMessage) errors[e.currentTarget.name] = errorsMessage;
-    else delete errors[e.currentTarget.name];
+    validate = () => {
+        const options = { abortEarly: true };
 
-    const dataClone = { ...data };
+        const { error } = this.schema.validate(this.data, options);
 
-    dataClone[name] = input.value;
+        if (!error) return null;
+        const errors = {};
+        for (let item of error.details) {
+            errors[item.path[0]] = item.message;
+        }
 
-    setData(dataClone);
+        return errors;
+    };
 
-    console.log(errors);
-    setAllErrors(errors);
-};
+    validateProperty = ({ name, value }, schema) => {
+        const obj = { [name]: value };
+        const schemaOfProperty = Joi.object({ [name]: schema.extract(name) });
 
-/* Input Handlers */
-const renderInput = (name, label, data, setData, allErrors, setAllErrors, schema, type = "text") => {
-    return (
-        <Input
-            name={name}
-            value={data[name]}
-            error={allErrors[name]}
-            onChange={(e) => handleChange(e, data, setData, allErrors, setAllErrors, schema)}
-            label={label}
-            type={type}
-        />
-    );
-};
+        const { error } = schemaOfProperty.validate(obj);
+        return error ? error.details[0].message : null;
+    };
 
-const renderButton = (data, schema, label) => {
-    const { error } = schema.validate(data);
+    handleChange = ({ currentTarget: input }) => {
+        const errors = { ...this.state.errors };
+        const errorsMessage = this.validateProperty(input, this.schema);
+        if (errorsMessage) errors[input.name] = errorsMessage;
+        else delete errors[input.name];
 
-    return (
-        <button disabled={error} className="btn btn-primary bt-lg">
-            {label}
-        </button>
-    );
-};
+        const dataClone = { ...this.state.data };
+        dataClone[input.name] = input.value;
 
-const renderSelect = (name, label, data, setData, allErrors, setAllErrors, genres, schema, defaultValue = null) => {
-    return (
-        <>
-            <div className="input-group mb-3  mt-4">
-                <div className="input-group-prepend">
-                    <label className="input-group-text" htmlFor={name}>
-                        {label}
-                    </label>
-                </div>
+        this.setState({ data: dataClone, errors });
+    };
 
-                <select
-                    name={name}
-                    className="custom-select"
-                    onChange={(e) => handleSelectChange(e, name, data, setData, allErrors, setAllErrors, schema)}
-                    id={name}
-                    defaultValue={defaultValue}
-                >
-                    <option value={JSON.stringify({})}>Select Genre</option>
-                    {genres.map((genre) => (
-                        <option key={genre._id} value={JSON.stringify(genre)}>
-                            {genre.name}
-                        </option>
-                    ))}
-                </select>
-            </div>
-            {allErrors[name] && <div className="alert alert-danger d-block">{allErrors[name]}</div>}
-        </>
-    );
-};
+    handleSubmit = (e) => {
+        e.preventDefault();
 
-/* Exports */
+        const errors = this.validate();
+        this.setState({ errors: errors || {} });
+        if (errors) return;
 
-export { validate, validateProperty, handleChange, handleSubmit, renderInput, renderButton, renderSelect };
+        this.doSubmit();
+    };
+
+    handleSelectChange = (e, name, data, setData, allErrors, setAllErrors, schema) => {
+        e.preventDefault();
+
+        const errors = { ...allErrors };
+
+        let input = {
+            name: e.currentTarget.name,
+            value: e.currentTarget.value === null ? null : JSON.parse(e.currentTarget.value),
+        };
+
+        const errorsMessage = this.validateProperty(input, schema);
+        if (errorsMessage) errors[e.currentTarget.name] = errorsMessage;
+        else delete errors[e.currentTarget.name];
+
+        const dataClone = { ...data };
+
+        dataClone[name] = input.value;
+
+        setData(dataClone);
+
+        setAllErrors(errors);
+    };
+
+    renderInput = (name, label, type = "text") => {
+        const { data, errors } = this.state;
+
+        return (
+            <Input
+                type={type}
+                name={name}
+                value={data[name] || ""}
+                label={label}
+                onChange={this.handleChange}
+                error={errors[name]}
+            />
+        );
+    };
+
+    renderButton = (label) => {
+        return (
+            <button disabled={Object.keys(this.state.errors).length > 0} className="btn btn-primary">
+                {label}
+            </button>
+        );
+    };
+
+    renderSelect = (name, label, options) => {
+        const { data, errors } = this.state;
+
+        return (
+            <Select
+                name={name}
+                value={data[name]}
+                label={label}
+                options={options}
+                onChange={this.handleChange}
+                error={errors[name]}
+            />
+        );
+    };
+}
+
+export default Form;

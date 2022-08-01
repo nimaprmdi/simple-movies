@@ -11,6 +11,8 @@ import LoginForm from "./components/LoginForm";
 import NewMovie from "./components/NewMovie";
 import NotFound from "./components/NotFound";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
 
 class App extends Component {
     state = {
@@ -19,6 +21,7 @@ class App extends Component {
             { id: 2, value: 0 },
             { id: 3, value: 0 },
         ],
+        movieId: "",
     };
 
     constructor(props) {
@@ -56,13 +59,15 @@ class App extends Component {
     render() {
         return (
             <>
+                <ToastContainer />
+
                 <main className="container">
                     <BrowserRouter>
                         <Navbar />
                         <Routes>
                             <Route path="/login" element={<LoginForm />} />
                             <Route path="/movies" element={<Movies />} />
-                            <Route path="/movies/:id/" element={<MoviesSingle />} />
+                            <Route path="/movies/:id/" element={<MoviesSingle id={this.state.movieId} />} />
                             <Route path="/movies/new" element={<NewMovie />} />
 
                             <Route path="/rentals" element={<Rentals />} />

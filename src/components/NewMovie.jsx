@@ -1,68 +1,90 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Joi from "joi";
-import { handleSubmit, renderInput, renderButton, renderSelect } from "./common/Form";
-import { getGenres, getGenreById } from "../services/fakeGenreService";
-import { getMovies, saveMovie } from "../services/fakeMovieService";
-import { useNavigate } from "react-router-dom";
+import { saveMovie, getMovie } from "../services/moviesService";
+import { getGenres } from "../services/genreService";
+import Form from "./common/Form";
+import { useParams, useNavigate } from "react-router-dom";
 
-const NewMovie = () => {
-    let navigate = useNavigate();
-    const [genres, setGenres] = useState(getGenres());
+export const NewMovie = () => {
+    const { id } = useParams();
+    const navigate = useNavigate();
+    return <NewMoviePage movieId={id} navigate={navigate} />;
+};
 
-    const [data, setData] = useState({
-        title: "",
-        numberInStock: "",
-        rate: "",
-        genre: "",
-        movies: [],
-    });
+class NewMoviePage extends Form {
+    state = {
+        data: {
+            title: "",
+            genreId: "",
+            numberInStock: "",
+            dailyRentalRate: "",
+        },
+        genres: [],
+        errors: {},
+    };
 
-    const [allErrors, setAllErrors] = useState({});
-
-    const schema = Joi.object({
+    schema = Joi.object({
         title: Joi.string().required().label("Title"),
-        genre: Joi.object().label("Genres"),
+        genreId: Joi.string().required().label("Genre"),
         numberInStock: Joi.number().required().min(0).max(100).label("Number In Stock"),
-        rate: Joi.number().required().min(0).max(5).label("Rate"),
+        dailyRentalRate: Joi.number().required().min(0).max(5).label("Rate"),
         movies: Joi.array(),
     });
 
-    const doSubmit = (e) => {
-        e.preventDefault();
+    async populateGenres() {
+        const { data: genres } = await getGenres();
+        this.setState({ genres });
+    }
 
-        const newMovie = {
-            title: data.title,
-            numberInStock: data.numberInStock,
-            dailyRentalRate: data.rate,
-            genre: data.genre,
-            liked: false,
+    async populateMovie() {
+        try {
+            const movieId = this.props.movieId;
+            console.log(this.props);
+
+            if (movieId === undefined) return;
+
+            const { data: movie } = await getMovie(movieId);
+            this.setState({ data: this.mapToViewModel(movie) });
+            // this.props.navigate(-1);
+        } catch (ex) {
+            if (ex.response && ex.response.status === 404) console.log(ex.response);
+        }
+    }
+
+    async componentDidMount() {
+        await this.populateGenres();
+        await this.populateMovie();
+    }
+
+    mapToViewModel(movie) {
+        return {
+            _id: movie._id,
+            title: movie.title,
+            genreId: movie.genre._id,
+            numberInStock: movie.numberInStock,
+            dailyRentalRate: movie.dailyRentalRate,
         };
+    }
 
-        saveMovie(newMovie);
-
-        navigate(-1);
+    doSubmit = async () => {
+        await saveMovie(this.state.data);
+        this.props.navigate("/movies");
     };
 
-    useEffect(() => {
-        setData({ ...data, movies: getMovies() });
-    }, []);
-
-    return (
-        <>
-            <h1>New Movie</h1>
-            <form className="px-3" onSubmit={(e) => handleSubmit(e, data, setAllErrors, () => doSubmit(e), schema)}>
-                {renderInput("title", "Title", data, setData, allErrors, setAllErrors, schema)}
-
-                {renderSelect("genre", "Genre", data, setData, allErrors, setAllErrors, genres, schema)}
-
-                {renderInput("numberInStock", "Number In Stock", data, setData, allErrors, setAllErrors, schema)}
-
-                {renderInput("rate", "Rate", data, setData, allErrors, setAllErrors, schema)}
-
-                {renderButton(data, schema, "Submit")}
-            </form>
-        </>
-    );
-};
+    render() {
+        return (
+            <>
+                <h1>New Movie</h1>
+                <form className="px-3" onSubmit={this.handleSubmit}>
+                    {this.renderInput("title", "Title")}
+                    {this.renderSelect("genreId", "Genre", this.state.genres)}
+                    {this.renderInput("numberInStock", "Number in Stock", "number")}
+                    {this.renderInput("dailyRentalRate", "Rate")}
+                    {this.renderButton("Save")}
+                </form>
+            </>
+        );
+    }
+}
 
 export default NewMovie;
