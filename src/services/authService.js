@@ -1,10 +1,12 @@
-import http from "./httpServices";
 import config from "./config.json";
 import jwtdecode from "jwt-decode";
+import httpServices from "./httpServices";
 import { toast } from "react-toastify";
 
 const apiEndpoint = config.apiUrl + "/auth";
 const tokenKey = "token";
+
+http.setJwt(getJwt());
 
 export async function login(email, password) {
     const { data: jwt } = await http.post(apiEndpoint, { email, password });
