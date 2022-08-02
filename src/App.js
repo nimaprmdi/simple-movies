@@ -17,6 +17,7 @@ import RegisterForm from "./components/RegisterForm";
 import jwtdecode from "jwt-decode";
 import Logout from "./components/common/Logout";
 import auth from "./services/authService";
+import ProtectedRoute from "./components/common/ProtectedRoute";
 
 class App extends Component {
     state = {};
@@ -65,17 +66,14 @@ class App extends Component {
                             <Route path="/login" element={<LoginForm />} />
                             <Route path="/register" element={<RegisterForm />} />
                             <Route path="/movies" element={<Movies user={this.state.user} />} />
-                            <Route
-                                path="/movies/:id/"
-                                element={
-                                    this.state.user ? (
-                                        <MoviesSingle id={this.state.movieId} />
-                                    ) : (
-                                        <Navigate replace to="/login" />
-                                    )
-                                }
-                            />
-                            <Route path="/movies/new" element={<NewMovie />} />
+
+                            <Route path="/movies/:id" element={<ProtectedRoute />}>
+                                <Route path="/movies/:id" element={<MoviesSingle />} />
+                            </Route>
+
+                            <Route path="/movies/new" element={<ProtectedRoute />}>
+                                <Route path="/movies/new" element={<NewMovie />} />
+                            </Route>
 
                             <Route path="/rentals" element={<Rentals />} />
 
