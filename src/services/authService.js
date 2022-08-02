@@ -1,6 +1,6 @@
 import config from "./config.json";
 import jwtdecode from "jwt-decode";
-import httpServices from "./httpServices";
+import http from "./httpServices";
 import { toast } from "react-toastify";
 
 const apiEndpoint = config.apiUrl + "/auth";
