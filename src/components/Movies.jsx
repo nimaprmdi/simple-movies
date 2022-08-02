@@ -1,17 +1,13 @@
 import React, { Component } from "react";
+import _ from "lodash";
 import ListGroup from "./common/ListGroup";
+import Moviestable from "./common/Moviestable";
 import Pagination from "./common/Pagination";
 import { paginate } from "./utils/paginate";
 import { getGenres } from "../services/genreService";
 import { getMovies, deleteMovie } from "../services/moviesService";
-import Moviestable from "./common/Moviestable";
-import _ from "lodash";
 import { Link } from "react-router-dom";
 import Search from "./common/Search";
-
-/** Api getting */
-import http from "../services/httpServices";
-import config from "../services/config.json";
 import { toast } from "react-toastify";
 
 class Movies extends Component {
@@ -26,17 +22,13 @@ class Movies extends Component {
 
     async componentDidMount() {
         const { data } = await getGenres();
-
         const genres = [{ name: "All genres" }, ...data];
-
         const { data: movies } = await getMovies();
-
         this.setState({ movies, genres });
     }
 
     handleDelete = async (movie) => {
         const originalMovies = this.state.movies;
-
         const movies = originalMovies.filter((m) => m._id !== movie._id);
         this.setState({ movies });
 
@@ -99,7 +91,7 @@ class Movies extends Component {
         const { length: count } = this.state.movies;
         const { pageSize, currentPage, sortColumn } = this.state;
         if (count === 0) return <p>No Movies</p>;
-
+        const { user } = this.props;
         const { totalCount, data: movies } = this.getPagedData();
 
         return (
@@ -112,9 +104,11 @@ class Movies extends Component {
                     />
                 </div>
                 <div className="col">
-                    <Link className="btn btn-primary mb-3" to="/movies/new">
-                        New Movie
-                    </Link>
+                    {user && (
+                        <Link className="btn btn-primary mb-3" to="/movies/new">
+                            New Movie
+                        </Link>
+                    )}
 
                     <p>Showing {totalCount} From DB</p>
 

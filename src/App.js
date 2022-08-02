@@ -64,8 +64,17 @@ class App extends Component {
                         <Routes>
                             <Route path="/login" element={<LoginForm />} />
                             <Route path="/register" element={<RegisterForm />} />
-                            <Route path="/movies" element={<Movies />} />
-                            <Route path="/movies/:id/" element={<MoviesSingle id={this.state.movieId} />} />
+                            <Route path="/movies" element={<Movies user={this.state.user} />} />
+                            <Route
+                                path="/movies/:id/"
+                                element={
+                                    this.state.user ? (
+                                        <MoviesSingle id={this.state.movieId} />
+                                    ) : (
+                                        <Navigate replace to="/login" />
+                                    )
+                                }
+                            />
                             <Route path="/movies/new" element={<NewMovie />} />
 
                             <Route path="/rentals" element={<Rentals />} />
