@@ -2,8 +2,17 @@ import React, { Component } from "react";
 import Form from "./common/Form";
 import Joi from "joi";
 import * as userService from "../services/userServices";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import auth from "../services/authService";
 
-class RegisterForm extends Form {
+export const RegisterForm = () => {
+    const navigate = useNavigate();
+
+    return <RegisterFormHandler navigate={navigate} />;
+};
+
+class RegisterFormHandler extends Form {
     state = {
         data: {
             username: "",
@@ -14,13 +23,29 @@ class RegisterForm extends Form {
     };
 
     schema = Joi.object({
-        username: Joi.string().required().label("Username"),
+        username: Joi.string()
+            .email({ tlds: { allow: false } })
+            .required()
+            .label("Username"),
         password: Joi.string().required().label("Password"),
         name: Joi.string().required().label("E-Mail"),
     });
 
     doSubmit = async () => {
-        await userService.register(this.state.data);
+        try {
+            const response = await userService.register(this.state.data);
+            auth.loginWithJwt(response.headers["x-auth-token"]);
+            toast.success("Success");
+            // this.props.navigate("/"); // useNaviaget inside class component
+            window.location = "/";
+        } catch (ex) {
+            if (ex.response && ex.response.status === 400) {
+                const errors = { ...this.state.errors };
+                errors.username = ex.response.data;
+                this.setState({ errors });
+                toast.error(ex.response);
+            }
+        }
     };
 
     render() {

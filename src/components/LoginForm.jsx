@@ -1,8 +1,16 @@
 import React, { Component } from "react";
 import Joi from "joi";
 import Form from "./common/Form";
+import { login } from "../services/authService";
+import { useNavigate } from "react-router-dom";
 
-class LoginForm extends Form {
+export const LoginForm = () => {
+    const navigate = useNavigate();
+
+    return <LoginFormPage navigate={navigate} />;
+};
+
+class LoginFormPage extends Form {
     state = {
         data: { username: "", password: "" },
         errors: {},
@@ -13,9 +21,17 @@ class LoginForm extends Form {
         password: Joi.string().required().label("Password"),
     });
 
-    doSubmit = () => {
-        // Call the server
-        console.log("Submitted");
+    doSubmit = async () => {
+        try {
+            const { data } = this.state;
+            await login(data.username, data.password);
+            // this.props.navigate("/"); // Usenavigate inside class component
+            window.location = "/";
+        } catch (error) {
+            const errors = { ...this.state.errors };
+            errors.username = error.response.data;
+            this.setState({ errors });
+        }
     };
 
     render() {

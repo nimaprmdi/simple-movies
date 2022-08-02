@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-const Navbar = () => {
+const Navbar = ({ user }) => {
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light mb-3">
             <div className="container-fluid">
@@ -39,23 +39,49 @@ const Navbar = () => {
                             Rentals
                         </NavLink>
 
-                        <NavLink
-                            to="/login"
-                            className={({ isActive }) =>
-                                isActive ? "active text-warning mr-2" : "inactive mr-2 text-primary"
-                            }
-                        >
-                            Login Form
-                        </NavLink>
+                        {!user && (
+                            <>
+                                <NavLink
+                                    to="/login"
+                                    className={({ isActive }) =>
+                                        isActive ? "active text-warning mr-2" : "inactive mr-2 text-primary"
+                                    }
+                                >
+                                    Login Form
+                                </NavLink>
 
-                        <NavLink
-                            to="/register"
-                            className={({ isActive }) =>
-                                isActive ? "active text-warning mr-2" : "inactive mr-2 text-primary"
-                            }
-                        >
-                            Register Form
-                        </NavLink>
+                                <NavLink
+                                    to="/register"
+                                    className={({ isActive }) =>
+                                        isActive ? "active text-warning mr-2" : "inactive mr-2 text-primary"
+                                    }
+                                >
+                                    Register Form
+                                </NavLink>
+                            </>
+                        )}
+
+                        {user && (
+                            <>
+                                <NavLink
+                                    to="/profile"
+                                    className={({ isActive }) =>
+                                        isActive ? "active text-warning mr-2" : "inactive mr-2 text-primary"
+                                    }
+                                >
+                                    {user.name}
+                                </NavLink>
+
+                                <NavLink
+                                    to="/logout"
+                                    className={({ isActive }) =>
+                                        isActive ? "active text-warning mr-2" : "inactive mr-2 text-primary"
+                                    }
+                                >
+                                    Logout
+                                </NavLink>
+                            </>
+                        )}
                     </ul>
                 </div>
             </div>

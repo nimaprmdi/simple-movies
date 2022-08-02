@@ -14,25 +14,21 @@ import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import RegisterForm from "./components/RegisterForm";
+import jwtdecode from "jwt-decode";
+import Logout from "./components/common/Logout";
+import auth from "./services/authService";
 
 class App extends Component {
-    state = {
-        counters: [
-            { id: 1, value: 4 },
-            { id: 2, value: 0 },
-            { id: 3, value: 0 },
-        ],
-        movieId: "",
-    };
+    state = {};
 
     constructor(props) {
         super(props);
-        // console.log("App - Constructed");
-        this.state.counters[0].value = 5;
+        // this.state.counters[0].value = 5;
     }
 
     componentDidMount() {
-        // console.log("App - Mounted");
+        const user = auth.getCurrentUser();
+        this.setState({ user });
     }
 
     handleDelete = (counterId) => {
@@ -64,7 +60,7 @@ class App extends Component {
 
                 <main className="container">
                     <BrowserRouter>
-                        <Navbar />
+                        <Navbar user={this.state.user} />
                         <Routes>
                             <Route path="/login" element={<LoginForm />} />
                             <Route path="/register" element={<RegisterForm />} />
@@ -73,6 +69,8 @@ class App extends Component {
                             <Route path="/movies/new" element={<NewMovie />} />
 
                             <Route path="/rentals" element={<Rentals />} />
+
+                            <Route path="/logout" element={<Logout />} />
 
                             <Route path="/" element={<Navigate replace to="/movies" />} />
 
