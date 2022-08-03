@@ -1,7 +1,7 @@
 import React from "react";
 import Form from "./Form";
 import Joi from "joi";
-import { useParams, useNavigate, Navigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { getGenres } from "../../services/genreService";
 import { getMovie, saveMovie } from "../../services/moviesService";
 
@@ -67,7 +67,6 @@ class MoviesSinglePage extends Form {
 
     doSubmit = async () => {
         await saveMovie(this.state.data);
-
         this.props.navigate("/movies");
     };
 

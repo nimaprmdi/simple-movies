@@ -2,12 +2,14 @@ import React, { Component } from "react";
 import Joi from "joi";
 import Form from "./common/Form";
 import { login } from "../services/authService";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
-export const LoginForm = () => {
+export const LoginForm = (props) => {
     const navigate = useNavigate();
+    const location = useLocation();
+    console.log(location);
 
-    return <LoginFormPage navigate={navigate} />;
+    return <LoginFormPage navigate={navigate} location={location} />;
 };
 
 class LoginFormPage extends Form {
@@ -25,8 +27,8 @@ class LoginFormPage extends Form {
         try {
             const { data } = this.state;
             await login(data.username, data.password);
-            // this.props.navigate("/"); // Usenavigate inside class component
-            window.location = "/";
+            this.props.navigate(this.props.location.state); // Usenavigate inside class component
+            // window.location = "/";
         } catch (error) {
             const errors = { ...this.state.errors };
             errors.username = error.response.data;

@@ -10,7 +10,7 @@ import MoviesSingle from "./components/common/MoviesSingle";
 import LoginForm from "./components/LoginForm";
 import NewMovie from "./components/NewMovie";
 import NotFound from "./components/NotFound";
-import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate, useParams } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import RegisterForm from "./components/RegisterForm";

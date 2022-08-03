@@ -24,7 +24,7 @@ class NewMoviePage extends Form {
     };
 
     schema = Joi.object({
-        title: Joi.string().required().label("Title"),
+        title: Joi.string().min(5).required().label("Title"),
         genreId: Joi.string().required().label("Genre"),
         numberInStock: Joi.number().required().min(0).max(100).label("Number In Stock"),
         dailyRentalRate: Joi.number().required().min(0).max(5).label("Rate"),
@@ -67,6 +67,7 @@ class NewMoviePage extends Form {
     }
 
     doSubmit = async () => {
+        console.log("haji");
         await saveMovie(this.state.data);
         this.props.navigate("/movies");
     };
