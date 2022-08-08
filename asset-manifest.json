@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/simple-movies/static/css/main.75d1aec4.css",
-    "main.js": "/simple-movies/static/js/main.1cbade65.js",
-    "static/js/787.b701888c.chunk.js": "/simple-movies/static/js/787.b701888c.chunk.js",
+    "main.js": "/simple-movies/static/js/main.d8f3faae.js",
+    "static/js/787.9a5f3165.chunk.js": "/simple-movies/static/js/787.9a5f3165.chunk.js",
     "static/media/fontawesome-webfont.svg?v=4.7.0": "/simple-movies/static/media/fontawesome-webfont.c1e38fd9e0e74ba58f7a.svg",
     "static/media/fontawesome-webfont.eot": "/simple-movies/static/media/fontawesome-webfont.8b43027f47b20503057d.eot",
     "static/media/fontawesome-webfont.ttf?v=4.7.0": "/simple-movies/static/media/fontawesome-webfont.1e59d2330b4c6deb84b3.ttf",
@@ -10,11 +10,11 @@
     "static/media/fontawesome-webfont.woff2?v=4.7.0": "/simple-movies/static/media/fontawesome-webfont.20fd1704ea223900efa9.woff2",
     "index.html": "/simple-movies/index.html",
     "main.75d1aec4.css.map": "/simple-movies/static/css/main.75d1aec4.css.map",
-    "main.1cbade65.js.map": "/simple-movies/static/js/main.1cbade65.js.map",
-    "787.b701888c.chunk.js.map": "/simple-movies/static/js/787.b701888c.chunk.js.map"
+    "main.d8f3faae.js.map": "/simple-movies/static/js/main.d8f3faae.js.map",
+    "787.9a5f3165.chunk.js.map": "/simple-movies/static/js/787.9a5f3165.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.75d1aec4.css",
-    "static/js/main.1cbade65.js"
+    "static/js/main.d8f3faae.js"
   ]
 }
